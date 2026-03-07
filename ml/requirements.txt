@@ -1,0 +1,30 @@
+# Smart Grain Silo - ML Dependencies
+# Install: pip install -r requirements.txt
+
+# Data handling
+pandas>=2.0.0
+numpy>=1.24.0
+
+# ThingSpeak API & HTTP
+requests>=2.31.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Classical ML & Anomaly Detection
+scikit-learn>=1.3.0
+
+# Time-Series Forecasting (ARIMA)
+statsmodels>=0.14.0
+
+# Deep Learning (LSTM)
+tensorflow>=2.13.0
+
+# Reinforcement Learning
+gymnasium>=0.29.0
+stable-baselines3>=2.1.0
+
+# Utilities
+python-dotenv>=1.0.0
+joblib>=1.3.0

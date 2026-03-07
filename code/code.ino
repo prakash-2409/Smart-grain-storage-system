@@ -33,6 +33,8 @@ ESP8266WebServer server(80);
 WiFiClient client;
 
 unsigned long lastCloudUpload = 0; 
+unsigned long lastBuzzerToggle = 0;  // Non-blocking buzzer timer
+bool buzzerState = false;            // Current buzzer on/off state
 
 float temp = 0.0;
 float hum = 0.0;
@@ -180,42 +182,51 @@ void loop() {
   }
 
   // ---> MULTI-STAGE ALARM LOGIC (WITH TELEGRAM) <---
-  if (gasValue > 90 || hum > 60.0) {
+  // Priority 1: Gas/Smoke (most critical — fire or spoilage)
+  if (gasValue > 90) {
     alertStatus = "SPOILAGE ALERT!";
-    digitalWrite(BUZZER_PIN, HIGH); // Solid beep for fire
+    digitalWrite(BUZZER_PIN, HIGH); // Solid continuous beep for gas/fire
     
-    if (millis() - lastTelegramMsg > 60000) { // 60s cooldown
+    if (millis() - lastTelegramMsg > 60000) {
       sendTelegram("🚨 CRITICAL ALERT: High Gas/Smoke detected in Grain Silo!");
       lastTelegramMsg = millis();
     }
   }
+  // Priority 2: High Humidity (mold risk)
   else if (hum > 60.0) {
     alertStatus = "HIGH HUMIDITY ALERT!";
-    digitalWrite(BUZZER_PIN, HIGH); 
-    delay(300);
-    digitalWrite(BUZZER_PIN, LOW);  // Slow warning beep
-    delay(300);
+    // Non-blocking slow pulse: 300ms on / 300ms off
+    if (millis() - lastBuzzerToggle > 300) {
+      buzzerState = !buzzerState;
+      digitalWrite(BUZZER_PIN, buzzerState ? HIGH : LOW);
+      lastBuzzerToggle = millis();
+    }
     
-    if (millis() - lastTelegramMsg > 60000) { // 60s cooldown
-      sendTelegram("💧 CLIMATE ALERT: Moisture > 50%. Exhaust Fan activated to purge air.");
+    if (millis() - lastTelegramMsg > 60000) {
+      sendTelegram("💧 CLIMATE ALERT: Humidity > 60%. Exhaust Fan activated to purge air.");
       lastTelegramMsg = millis();
     }
   }
+  // Priority 3: Motion (intruder/rodent)
   else if (motion == HIGH) {
     alertStatus = "INTRUDER DETECTED!";
-    digitalWrite(BUZZER_PIN, HIGH);
-    delay(150);
-    digitalWrite(BUZZER_PIN, LOW);  // Fast beep for intruder
-    delay(150);
+    // Non-blocking fast pulse: 150ms on / 150ms off
+    if (millis() - lastBuzzerToggle > 150) {
+      buzzerState = !buzzerState;
+      digitalWrite(BUZZER_PIN, buzzerState ? HIGH : LOW);
+      lastBuzzerToggle = millis();
+    }
     
-    if (millis() - lastTelegramMsg > 60000) { // 60s cooldown
+    if (millis() - lastTelegramMsg > 60000) {
       sendTelegram("⚠️ SECURITY ALERT: Motion detected at Grain Silo hatch!");
       lastTelegramMsg = millis();
     }
   }
+  // All clear
   else {
     alertStatus = "SAFE";
     digitalWrite(BUZZER_PIN, LOW);
+    buzzerState = false;
   }
   
   // ---> THINGSPEAK CLOUD UPLOAD (Every 20 Seconds) <---
