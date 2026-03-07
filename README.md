@@ -46,14 +46,14 @@ Smart buzzer logic produces distinct audio signatures for different threats so w
 
 *(Drop your actual project photos here! Just drag and drop your images into GitHub and it will generate the links for you).*
 
-> **<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/1636b35f-d3a6-47ee-9f52-7299d18629a0" />*
+> **<img width="1200" height="1600" alt="image" src="https://gith<img width="1838" height="976" alt="Screenshot 2026-02-27 065230" src="https://github.com/user-attachments/assets/06a21c8e-37c5-4b68-b462-7ac5bc4936d4" />
+ub.com/user-attachments/assets/1636b35f-d3a6-47ee-9f52-7299d18629a0" />*
 *
 > **<img width="1400" height="869" alt="Screenshot 2026-02-27 074138" src="https://github.com/user-attachments/assets/c32b9aa1-2b49-470d-9d2b-56a984d87d20" />*
 
 > 
-> **Insert Photo 2 here:** *Screenshot of the Telegram Bot sending an alert message.*
+> **<img width="1807" height="966" alt="Screenshot 2026-02-27 064920" src="https://github.com/user-attachments/assets/1f6c415a-2ece-4aa9-b103-34f378c87768" />*
 > 
-> **Insert Photo 3 here:** *A clear, well-lit photo of your physical hardware and wiring.*
 
 ---
 
